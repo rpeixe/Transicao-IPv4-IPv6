@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class IPPacket
 {
@@ -19,7 +21,23 @@ public class IPPacket
         this.receiver = receiver;
         this.payload = payload;
 
+        if (receiver.nat == sender.nat || receiver.nat == sender)
+        {
+            // Rede interna
+
+            destination = receiver.GetIP(version);
+        }
+        else
+        {
+            // Rede externa
+
+            destination = receiver.GetPublicIP(version);
+        }
+        if (version == 6 && !receiver.Ipv6Enabled && sender.nat && sender.nat.nat64)
+        {
+            destination = "64:ff9b::" + receiver.GetPublicIP(4);
+        }
+
         source = sender.GetIP(version);
-        destination = receiver.GetIP(version);
     }
 }

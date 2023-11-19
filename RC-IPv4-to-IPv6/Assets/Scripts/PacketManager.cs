@@ -13,7 +13,7 @@ public class PacketManager : MonoBehaviour
     private Vector3 target = Vector3.zero;
 
     float timeElapsed;
-    float lerpDuration = 2f;
+    float lerpDuration = 1f;
 
     private void Awake()
     {

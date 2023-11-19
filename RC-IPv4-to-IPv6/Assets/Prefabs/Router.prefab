@@ -36,8 +36,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.74}
-  m_SizeDelta: {x: 400, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0.657}
+  m_SizeDelta: {x: 600, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &8974091167984816445
 Canvas:
@@ -137,7 +137,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 400, y: 100}
+  m_SizeDelta: {x: 600, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1562337677594952928
 CanvasRenderer:
@@ -194,8 +194,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 28
+  m_fontSizeBase: 28
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -342,8 +342,9 @@ MonoBehaviour:
   Ipv4Enabled: 1
   Ipv6Enabled: 0
   tunnelEnabled: 0
-  isNat: 0
+  nat64: 0
   natFor: []
+  nat: {fileID: 0}
   IpText: {fileID: 8390801371576054580}
   linePrefab: {fileID: 8423175727578829958, guid: cfe207492cad47a4ba8921b9b79957b7, type: 3}
 --- !u!70 &310188880628387478
