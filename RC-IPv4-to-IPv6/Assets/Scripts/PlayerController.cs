@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     public static event Action<Router> RouterSelected;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour
         {
             int ipVersion;
 
+            // Seleciona a versão do pacote
             if (selectedRouter.CanReachByIpv6(router))
             {
                 ipVersion = 6;
@@ -45,7 +46,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Nenhum caminho encontrado.");
                 return;
             }
 
