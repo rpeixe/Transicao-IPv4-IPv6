@@ -60,7 +60,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &8582517280132980055
 MonoBehaviour:
@@ -336,15 +336,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedRouters: []
-  tunnelDestinations: []
   Ipv4: 
   Ipv6: 
   Ipv4Enabled: 1
   Ipv6Enabled: 0
   tunnelEnabled: 0
   nat64: 0
-  natFor: []
   nat: {fileID: 0}
+  natFor: []
   IpText: {fileID: 8390801371576054580}
   linePrefab: {fileID: 8423175727578829958, guid: cfe207492cad47a4ba8921b9b79957b7, type: 3}
 --- !u!70 &310188880628387478
