@@ -234,6 +234,8 @@ public class Router : MonoBehaviour
             }
             else
             {
+                // Verifica se há caminho por NAT64
+
                 return CanReachByIpv4(destination.nat) && destination.nat.CanReachByIpv6(destination);
             }
         }
@@ -243,6 +245,7 @@ public class Router : MonoBehaviour
         bool result = true;
         int tunnels = 0;
 
+        // Verifica se há caminho direto ou por túnel
         foreach (Router router in path)
         {
             if (!router.Ipv4Enabled)
@@ -282,6 +285,8 @@ public class Router : MonoBehaviour
             }
             else
             {
+                // Verifica se há caminho por NAT64
+
                 return CanReachByIpv6(nat) && nat.CanReachByIpv4(destination);
             }
         }
@@ -291,6 +296,7 @@ public class Router : MonoBehaviour
         bool result = true;
         int tunnels = 0;
 
+        // Verifica se há caminho direto ou por túnel
         foreach (Router router in path)
         {
             if (!router.Ipv6Enabled)
@@ -347,6 +353,7 @@ public class Router : MonoBehaviour
     {
         if (hops == 0)
         {
+            // Inicio
             TransmissionStarted?.Invoke(packet);
         }
 
@@ -357,22 +364,22 @@ public class Router : MonoBehaviour
         {
             if (packet.payload is IPPacket encapsulatedPacket)
             {
-                Debug.Log(name + ": Pacote desencapsulado");
-
+                // Desencapsula mensagem
                 PacketUpdated?.Invoke(encapsulatedPacket);
                 StartCoroutine(SendPacket(encapsulatedPacket, hops));
             }
             else
             {
+                // Mensagem chegou
                 TransmissionFinished?.Invoke(packet);
-                Debug.Log(name + ": Chegou! Mensagem:");
-                Debug.Log(packet.payload);
             }
             yield break;
         }
 
         if (natFor.Contains(packet.sender) && !natFor.Contains(packet.receiver))
         {
+            // É NAT do emissor e a mensagem vai para fora
+
             int version = packet.version;
 
             if (nat64 && packet.version == 6 && !packet.receiver.Ipv6Enabled)
@@ -387,8 +394,10 @@ public class Router : MonoBehaviour
             PacketUpdated?.Invoke(packet);
             yield return new WaitForSeconds(delay);
         }
-        else if (natFor.Contains(packet.receiver))
+        else if (natFor.Contains(packet.receiver) && !natFor.Contains(packet.sender))
         {
+            // É NAT do receptor e a mensagem vem de fora
+
             int version = packet.version;
 
             if (nat64 && packet.version == 4 && !packet.receiver.Ipv4Enabled)
@@ -405,10 +414,10 @@ public class Router : MonoBehaviour
         }
 
         Router nextRouter = routingTable.FirstOrDefault(tuple => tuple.Item1 == packet.receiver).Item2;
-        if (packet.version == 4 && nextRouter.Ipv4Enabled
-            || packet.version == 6 && nextRouter.Ipv6Enabled)
+        if (packet.version == 4 && nextRouter.Ipv4Enabled || packet.version == 6 && nextRouter.Ipv6Enabled)
         {
-            Debug.Log(name + ": Pacote encaminhado.");
+            // Roteia a mensagem
+
             PacketSent?.Invoke(packet, this, nextRouter);
             StartCoroutine(nextRouter.SendPacket(packet, hops + 1));
         }
@@ -434,6 +443,8 @@ public class Router : MonoBehaviour
 
                 foreach (Router router in path)
                 {
+                    // Busca um caminho por tunel
+
                     if (router.tunnelEnabled)
                     {
                         if ((version == 4 && CanReachByIpv4(router)) || (version == 6 && CanReachByIpv6(router)))
@@ -446,21 +457,21 @@ public class Router : MonoBehaviour
 
                 if (closestRouter != this)
                 {
+                    // Encapsula o pacote
 
-                    Debug.Log(name + ": Pacote encapsulado");
                     IPPacket newPacket = new IPPacket(version, this, closestRouter, packet);
                     PacketUpdated?.Invoke(newPacket);
                     StartCoroutine(SendPacket(newPacket, hops));
                 }
                 else
                 {
-                    Debug.Log(name + ": Não é possível encaminhar :(");
+                    // Não encontrou rota
                     TransmissionFinished?.Invoke(packet);
                 }
             }
             else
             {
-                Debug.Log(name + ": Não é possível encaminhar :(");
+                // Não encontrou rota
                 TransmissionFinished?.Invoke(packet);
             }
         }
