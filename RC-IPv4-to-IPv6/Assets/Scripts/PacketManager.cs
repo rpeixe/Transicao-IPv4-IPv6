@@ -20,6 +20,20 @@ public class PacketManager : MonoBehaviour
         Instance = this;
     }
 
+    private void OnEnable()
+    {
+        Router.TransmissionStarted += CreatePacket;
+        Router.TransmissionFinished += DestroyPacket;
+        Router.PacketSent += MovePacket;
+    }
+
+    private void OnDisable()
+    {
+        Router.TransmissionStarted -= CreatePacket;
+        Router.TransmissionFinished -= DestroyPacket;
+        Router.PacketSent -= MovePacket;
+    }
+
     private void Update()
     {
         if (packetObject != null)

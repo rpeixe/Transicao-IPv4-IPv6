@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +18,26 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        Router.Clicked += OnRouterClicked;
+        Router.TransmissionFinished += OnTransmissionFinished;
+    }
+
+    private void OnDisable()
+    {
+        Router.Clicked -= OnRouterClicked;
+        Router.TransmissionFinished -= OnTransmissionFinished;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     public void OnRouterClicked(Router router)

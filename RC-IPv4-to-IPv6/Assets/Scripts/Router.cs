@@ -22,11 +22,11 @@ public class Router : MonoBehaviour
     public Router nat;
     public List<Router> natFor = new List<Router>();
 
-    public event Action<Router> Clicked;
-    public event Action<IPPacket> PacketUpdated;
-    public event Action<IPPacket> TransmissionStarted;
-    public event Action<IPPacket, Router, Router> PacketSent;
-    public event Action<IPPacket> TransmissionFinished;
+    public static event Action<Router> Clicked;
+    public static event Action<IPPacket> PacketUpdated;
+    public static event Action<IPPacket> TransmissionStarted;
+    public static event Action<IPPacket, Router, Router> PacketSent;
+    public static event Action<IPPacket> TransmissionFinished;
 
     [SerializeField] private TextMeshProUGUI IpText;
     [SerializeField] private GameObject linePrefab;
@@ -38,13 +38,6 @@ public class Router : MonoBehaviour
 
     private void Start()
     {
-        Clicked += PlayerController.Instance.OnRouterClicked;
-        PacketUpdated += UIController.Instance.UpdatePacket;
-        TransmissionStarted += PacketManager.Instance.CreatePacket;
-        TransmissionStarted += UIController.Instance.OnTransmissionStarted;
-        TransmissionFinished += PacketManager.Instance.DestroyPacket;
-        TransmissionFinished += PlayerController.Instance.OnTransmissionFinished;
-        PacketSent += PacketManager.Instance.MovePacket;
         CreateRoutingTable();
         DrawLines();
     }
@@ -283,7 +276,7 @@ public class Router : MonoBehaviour
         }
         if (!destination.Ipv6Enabled)
         {
-            if (!nat || !nat.nat64)
+            if (!nat || !nat.nat64 || IsDualStack())
             {
                 return false;
             }

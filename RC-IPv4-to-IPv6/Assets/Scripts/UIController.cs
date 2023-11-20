@@ -28,9 +28,18 @@ public class UIController : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    private void OnEnable()
     {
         PlayerController.RouterSelected += OnRouterSelected;
+        Router.PacketUpdated += UpdatePacket;
+        Router.TransmissionStarted += OnTransmissionStarted;
+    }
+
+    private void OnDisable()
+    {
+        PlayerController.RouterSelected -= OnRouterSelected;
+        Router.PacketUpdated -= UpdatePacket;
+        Router.TransmissionStarted -= OnTransmissionStarted;
     }
 
     public void UpdatePacket(IPPacket packet)
